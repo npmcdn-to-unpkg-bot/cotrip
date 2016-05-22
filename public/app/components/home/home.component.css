@@ -1,0 +1,9 @@
+div#jumbotron {
+    background: url('app/images/background.jpg');
+    background-size: cover;
+    background-position-y: -90px;
+}
+
+div#jumbotron .display-3, .lead {
+    color: #fff;
+}
