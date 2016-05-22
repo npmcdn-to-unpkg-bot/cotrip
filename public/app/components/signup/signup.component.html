@@ -3,7 +3,13 @@
         <div class="card card-block text-xs-center">
             <h4 class="card-title">Create account</h4>
             <p class="card-text">You won't regret, I promise.</p>
-            <form [ngFormModel]="signUpForm" #signup="ngForm">
+            <form [ngFormModel]="signUpForm" #f="ngForm">
+                <fieldset class="form-group">
+                    <input type="text" ngControl="first_name" required class="form-control" placeholder="First name">
+                </fieldset>
+                <fieldset class="form-group">
+                    <input type="text" ngControl="last_name" required class="form-control" placeholder="Last name">
+                </fieldset>
                 <fieldset class="form-group">
                     <input type="text" ngControl="username" required class="form-control" placeholder="Username">
                 </fieldset>
@@ -11,7 +17,8 @@
                     <input type="password" ngControl="password" required class="form-control" placeholder="Password">
                 </fieldset>
             </form>
-            <a href="#" class="btn btn-primary" (click)="signup(signup.value)">Create account</a>
+            <a href="#" class="btn btn-primary" (click)="signup(f.value)">Create account</a>
+            <button type="button" class="btn btn-link btn-sm" [routerLink]="['Login']">or login instead</button>
         </div>
     </div>
 </div>

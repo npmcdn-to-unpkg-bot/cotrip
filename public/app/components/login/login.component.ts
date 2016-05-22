@@ -2,7 +2,6 @@ import {Component} from '@angular/core';
 import {Router, ROUTER_DIRECTIVES, RouterLink} from '@angular/router-deprecated';
 import {CORE_DIRECTIVES, FORM_DIRECTIVES, ControlGroup, Control} from '@angular/common';
 import {Http, Headers} from '@angular/http';
-import {sweetAlert} from 'sweetAlert2';
 
 // Add the RxJS Observable operators we need in this app.
 import './rxjs-operators';
@@ -33,7 +32,7 @@ export class LoginComponent {
         var headers = new Headers();
         headers.append('Content-Type', 'application/x-www-form-urlencoded');
 
-        this.http.post('http://localhost:3005/sessions/create', credentials, {
+        this.http.post('http://localhost:3005/login', credentials, {
             headers: headers
         }).map(res => res.json())
             .subscribe(
@@ -53,14 +52,9 @@ export class LoginComponent {
     }
 
     private static handleError(error:any) {
-        let errMsg = (error.message) ? error.message :
-            error.status ? `${error.status} - ${error.statusText}` : 'Server error';
-        sweetAlert(
-            'Oops...',
-            'Error: ' + errMsg,
-            'error'
-        );
-        return Observable.throw(errMsg);
+        console.log(error);
+        alert('[' + error.status + '] ' + error._body);
+        return Observable.throw(error);
     }
 }
 

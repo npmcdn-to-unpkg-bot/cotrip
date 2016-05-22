@@ -12,7 +12,6 @@ var core_1 = require('@angular/core');
 var router_deprecated_1 = require('@angular/router-deprecated');
 var common_1 = require('@angular/common');
 var http_1 = require('@angular/http');
-var sweetAlert2_1 = require('sweetAlert2');
 // Add the RxJS Observable operators we need in this app.
 require('./rxjs-operators');
 var Observable_1 = require("rxjs/Observable");
@@ -32,7 +31,7 @@ var LoginComponent = (function () {
         var credentials = "username=" + username + "&password=" + password;
         var headers = new http_1.Headers();
         headers.append('Content-Type', 'application/x-www-form-urlencoded');
-        this.http.post('http://localhost:3005/sessions/create', credentials, {
+        this.http.post('http://localhost:3005/login', credentials, {
             headers: headers
         }).map(function (res) { return res.json(); })
             .subscribe(function (data) {
@@ -46,10 +45,9 @@ var LoginComponent = (function () {
         }
     };
     LoginComponent.handleError = function (error) {
-        var errMsg = (error.message) ? error.message :
-            error.status ? error.status + " - " + error.statusText : 'Server error';
-        sweetAlert2_1.sweetAlert('Oops...', 'Error: ' + errMsg, 'error');
-        return Observable_1.Observable.throw(errMsg);
+        console.log(error);
+        alert('[' + error.status + '] ' + error._body);
+        return Observable_1.Observable.throw(error);
     };
     LoginComponent = __decorate([
         core_1.Component({

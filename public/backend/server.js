@@ -4,11 +4,14 @@ var logger = require('morgan'),
     express = require('express'),
     errorhandler = require('errorhandler'),
     dotenv = require('dotenv'),
-    bodyParser = require('body-parser');
+    bodyParser = require('body-parser'),
+    Sequelize = require('sequelize');
 
 var app = express();
 
 dotenv.load();
+
+
 
 // Parsers
 // old version of line
