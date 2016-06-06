@@ -8,12 +8,13 @@ import {APP_BASE_HREF} from '@angular/common';
 
 
 import {AppComponent}   from './app.component';
-import {AuthHttp, AuthConfig} from "angular2-jwt";
+import {AuthHttp, AuthConfig, AUTH_PROVIDERS} from "angular2-jwt";
 
 bootstrap(AppComponent, [
     FORM_PROVIDERS,
     ROUTER_PROVIDERS,
     HTTP_PROVIDERS,
+    AUTH_PROVIDERS,
     provide(AuthHttp, {
         useFactory: (http) => {
             return new AuthHttp(new AuthConfig({

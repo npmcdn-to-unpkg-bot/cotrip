@@ -1,0 +1,20 @@
+.profile-table th {
+    width: 120px;
+}
+
+a#save {
+    color: #27ae60;
+}
+
+#day-list {
+    height: 250px;
+    overflow: scroll;
+}
+
+.fa-m-b-4 {
+    margin-bottom: 4px;
+}
+
+.fa-m-t-3 {
+    margin-top: 3px;
+}

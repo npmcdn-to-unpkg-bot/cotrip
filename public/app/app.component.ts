@@ -5,14 +5,14 @@ import {LoginComponent} from "./components/login/login.component";
 import {SignupComponent} from "./components/signup/signup.component";
 import {ProfileComponent} from "./components/profile/profile.component";
 import {LoggedInRouterOutlet} from "./LoggedInOutlet";
+import {UserService} from "./services/user.service";
+import {Handle} from "./services/handle.service";
 
 @Component({
     selector: 'app',
     templateUrl: 'app/app.component.html',
     directives: [ROUTER_DIRECTIVES, LoggedInRouterOutlet],
-    providers: [
-        ROUTER_PROVIDERS,
-    ]
+    providers: [ROUTER_PROVIDERS, UserService, Handle]
 })
 
 @RouteConfig([
@@ -23,13 +23,12 @@ import {LoggedInRouterOutlet} from "./LoggedInOutlet";
 ])
 
 export class AppComponent {
-    constructor(public router:Router) {
+
+    constructor(public router:Router, private userService:UserService) {
     }
 
     logout() {
-        // logging out means just deleting the JWT from localStorage
-        // and redirecting the user to the Login page
-        localStorage.removeItem('id_token');
+        this.userService.logout();
         this.router.navigate(['Login']);
     }
 }

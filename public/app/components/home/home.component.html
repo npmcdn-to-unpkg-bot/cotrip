@@ -1,3 +1,26 @@
+<div class="row m-t-1 m-b-1">
+    <div class="col-md-12">
+        <nav class="navbar navbar-light bg-faded">
+            <ul class="nav navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" [routerLink]="['Home']">Cotrip <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" [routerLink]="['Login']">asd</a>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav pull-xs-right">
+                <li class="nav-item" *ngIf="loggedIn">
+                    <i class="fa fa-sign-out" aria-hidden="true"></i>
+                    <a class="nav-link" (click)="logout()">Logout</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" *ngIf="!loggedIn" [routerLink]="['Login']">Login</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
 <div class="row">
     <div class="col-md-12">
         <div class="jumbotron jumbotron-fluid" id="jumbotron">

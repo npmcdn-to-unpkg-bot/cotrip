@@ -1,26 +1,31 @@
 module.exports = function (sequelize, Sequelize) {
-    return sequelize.define('users', {
+    return sequelize.define('user', {
         id: {
             primaryKey: true,
             type: Sequelize.UUID,
-            defaultValue: Sequelize.UUIDV4,
-            field: 'id'
+            defaultValue: Sequelize.UUIDV4
         },
         first_name: {
             type: Sequelize.STRING,
-            field: 'first_name'
+            allowNull: false
         },
         last_name: {
             type: Sequelize.STRING,
-            field: 'last_name'
+            allowNull: false
         },
         username: {
             type: Sequelize.STRING,
-            field: 'username'
+            allowNull: false
         },
         password: {
             type: Sequelize.STRING,
-            field: 'password'
+            allowNull: false
+        },
+        address_id: {
+            type: Sequelize.UUID
+        },
+        role: {
+            type: Sequelize.STRING
         }
     }, {
         freezeTableName: true // model tableName will be the same as the model name

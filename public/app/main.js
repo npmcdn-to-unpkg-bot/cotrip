@@ -12,6 +12,7 @@ platform_browser_dynamic_1.bootstrap(app_component_1.AppComponent, [
     common_1.FORM_PROVIDERS,
     router_deprecated_1.ROUTER_PROVIDERS,
     http_1.HTTP_PROVIDERS,
+    angular2_jwt_1.AUTH_PROVIDERS,
     core_1.provide(angular2_jwt_1.AuthHttp, {
         useFactory: function (http) {
             return new angular2_jwt_1.AuthHttp(new angular2_jwt_1.AuthConfig({

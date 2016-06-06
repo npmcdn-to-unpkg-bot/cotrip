@@ -1,5 +1,6 @@
 import {Directive, Attribute, ViewContainerRef, DynamicComponentLoader} from '@angular/core';
 import {Router, RouterOutlet, ComponentInstruction} from '@angular/router-deprecated';
+import {UserService} from "./services/user.service";
 
 @Directive({
     selector: 'auth-router-outlet'
@@ -27,9 +28,10 @@ export class LoggedInRouterOutlet extends RouterOutlet {
 
     activate(instruction:ComponentInstruction) {
         let url = instruction.urlPath;
-        if (!this.publicRoutes[url] && !localStorage.getItem('id_token')) {
+        if (!this.publicRoutes[url] && !UserService.isLoggedIn()) {
             this.parentRouter.navigateByUrl('/login');
         }
+
         return super.activate(instruction);
     }
 }

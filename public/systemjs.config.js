@@ -5,20 +5,27 @@
     //map tells the System loader where to look for things
     var map = {
         'app': 'app',
+        'moment': './node_modules/moment/',
         'angular2-jwt': './node_modules/angular2-jwt/',
+        'ng2-bootstrap': './node_modules/ng2-bootstrap',
         '@angular': 'https://npmcdn.com/@angular', // sufficient if we didn't pin the version
         'angular2-in-memory-web-api': 'https://npmcdn.com/angular2-in-memory-web-api', // get latest0
         'rxjs': 'https://npmcdn.com/rxjs@5.0.0-beta.6',
         'ts': 'https://npmcdn.com/plugin-typescript@4.0.10/lib/plugin.js',
-        'typescript': 'https://npmcdn.com/typescript@1.8.10/lib/typescript.js'
+        'typescript': 'https://npmcdn.com/typescript@1.8.10/lib/typescript.js',
+        'primeng': 'node_modules/primeng',
+        'lodash': 'node_modules/lodash'
     };
 
     //packages tells the System loader how to load when no filename and/or no extension
     var packages = {
         'app': {main: 'main.ts', defaultExtension: 'ts'},
+        'ng2-bootstrap': {main: 'ng2-bootstrap.min.js', defaultExtension: 'js'},
         'angular2-jwt': {main: 'angular2-jwt.ts', defaultExtension: 'ts'},
         'rxjs': {defaultExtension: 'js'},
-        'angular2-in-memory-web-api': {defaultExtension: 'js'}
+        'angular2-in-memory-web-api': {defaultExtension: 'js'},
+        'primeng': {defaultExtension: 'js'},
+        'lodash': {main: 'index.js', defaultExtension: 'js'}
     };
 
     var ngPackageNames = [

@@ -2,17 +2,19 @@ import {Component} from '@angular/core';
 import {ControlGroup, Control} from '@angular/common';
 import {Router, RouterLink} from '@angular/router-deprecated';
 import {Http, Headers} from '@angular/http';
-import {Observable} from "rxjs/Observable";
+import {Handle} from "../../services/handle.service";
 
 @Component({
     selector: 'signup',
     directives: [RouterLink],
+    providers: [Handle],
+    styleUrls: ['app/components/signup/signup.component.css'],
     templateUrl: 'app/components/signup/signup.component.html'
 })
 export class SignupComponent {
     signUpForm:ControlGroup;
 
-    constructor(public router:Router, public http:Http) {
+    constructor(public router:Router, public http:Http, private handle:Handle) {
         this.signUpForm = new ControlGroup({
             first_name: new Control(""),
             last_name: new Control(""),
@@ -29,30 +31,18 @@ export class SignupComponent {
 
         var credentials = "first_name=" + first_name + "&last_name=" +
             last_name + "&username=" + username + "&password=" + password;
-        var headers = new Headers();
-        headers.append('Content-Type', 'application/x-www-form-urlencoded');
+        var headers = new Headers({'Content-Type': 'application/x-www-form-urlencoded'});
 
-        this.http.post('http://localhost:3005/signup', credentials, {
+        this.http.post('http://localhost:3010/signup', credentials, {
             headers: headers
         }).map(res => res.json())
             .subscribe(
                 data => {
-                    SignupComponent.saveJwt(data.id_token);
+                    this.handle.saveJwt(data.id_token);
                     this.router.parent.navigateByUrl('/profile');
                 },
-                err => SignupComponent.handleError(err),
+                err => this.handle.error(err),
                 () => console.log('Auth OK!')
             );
-    }
-
-    static saveJwt(jwt) {
-        if (jwt) {
-            localStorage.setItem('id_token', jwt)
-        }
-    }
-
-    private static handleError(error:any) {
-        alert('[' + error.status + '] ' + error._body);
-        return Observable.throw(error);
     }
 }

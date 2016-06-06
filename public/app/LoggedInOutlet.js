@@ -18,6 +18,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 var core_1 = require('@angular/core');
 var router_deprecated_1 = require('@angular/router-deprecated');
+var user_service_1 = require("./services/user.service");
 var LoggedInRouterOutlet = (function (_super) {
     __extends(LoggedInRouterOutlet, _super);
     function LoggedInRouterOutlet(_viewContainerRef, _loader, _parentRouter, nameAttr) {
@@ -34,7 +35,7 @@ var LoggedInRouterOutlet = (function (_super) {
     }
     LoggedInRouterOutlet.prototype.activate = function (instruction) {
         var url = instruction.urlPath;
-        if (!this.publicRoutes[url] && !localStorage.getItem('id_token')) {
+        if (!this.publicRoutes[url] && !user_service_1.UserService.isLoggedIn()) {
             this.parentRouter.navigateByUrl('/login');
         }
         return _super.prototype.activate.call(this, instruction);

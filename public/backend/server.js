@@ -11,8 +11,6 @@ var app = express();
 
 dotenv.load();
 
-
-
 // Parsers
 // old version of line
 // app.use(bodyParser.urlencoded());
@@ -36,7 +34,7 @@ if (process.env.NODE_ENV === 'development') {
 
 app.use(require('./user-routes'));
 
-var port = process.env.PORT || 3005;
+var port = process.env.PORT || 3010;
 
 http.createServer(app).listen(port, function (err) {
     console.log('listening in http://localhost:' + port);

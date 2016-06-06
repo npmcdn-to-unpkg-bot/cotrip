@@ -6,10 +6,12 @@ import {Http, Headers} from '@angular/http';
 // Add the RxJS Observable operators we need in this app.
 import './rxjs-operators';
 import {Observable} from "rxjs/Observable";
+import {UserService} from "../../services/user.service";
 
 @Component({
     selector: 'login',
     directives: [RouterLink, CORE_DIRECTIVES, FORM_DIRECTIVES, ROUTER_DIRECTIVES],
+    styleUrls: ['app/components/login/login.component.css'],
     templateUrl: 'app/components/login/login.component.html'
 })
 
@@ -21,6 +23,8 @@ export class LoginComponent {
             username: new Control(""),
             password: new Control("")
         });
+
+        if (UserService.isLoggedIn()) this.router.parent.navigateByUrl('/profile')
     }
 
     authenticate(data) {
@@ -29,10 +33,9 @@ export class LoginComponent {
 
         var credentials = "username=" + username + "&password=" + password;
 
-        var headers = new Headers();
-        headers.append('Content-Type', 'application/x-www-form-urlencoded');
+        var headers = new Headers({'Content-Type': 'application/x-www-form-urlencoded'});
 
-        this.http.post('http://localhost:3005/login', credentials, {
+        this.http.post('http://localhost:3010/login', credentials, {
             headers: headers
         }).map(res => res.json())
             .subscribe(
@@ -46,9 +49,7 @@ export class LoginComponent {
     }
 
     static saveJwt(jwt) {
-        if (jwt) {
-            localStorage.setItem('id_token', jwt)
-        }
+        if (jwt) localStorage.setItem('id_token', jwt)
     }
 
     private static handleError(error:any) {

@@ -1,24 +1,252 @@
-<h1>Profile</h1>
-<!-- Nav tabs -->
-<ul class="nav nav-tabs" role="tablist">
-    <li class="nav-item">
-        <a class="nav-link active" data-toggle="tab" href="#home" role="tab">Home</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" data-toggle="tab" href="#profile" role="tab">Profile</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" data-toggle="tab" href="#messages" role="tab">Messages</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" data-toggle="tab" href="#settings" role="tab">Settings</a>
-    </li>
-</ul>
+<div class="row m-t-1 m-b-1">
+    <div class="col-md-12">
+        <nav class="navbar navbar-light bg-faded">
+            <ul class="nav navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" [routerLink]="['Home']">Cotrip <span class="sr-only">(current)</span></a>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav pull-xs-right">
+                <li class="nav-item">
+                    <a class="nav-link" (click)="logout()" href>Logout <i class="fa fa-sign-out" aria-hidden="true"></i></a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-block">
+                <h4 class="card-title">Profile</h4>
+                <div [ngSwitch]="editingInfo">
+                    <div *ngSwitchDefault>
+                        <table class="table profile-table">
+                            <tbody>
+                            <tr>
+                                <th scope="row">First Name</th>
+                                <td>{{user?.first_name}}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Last Name</th>
+                                <td>{{user?.last_name}}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Username</th>
+                                <td>{{user?.username}}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Last Update</th>
+                                <td>{{getDate(user?.updatedAt)}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <a href="#" class="btn btn-block btn-secondary btn-sm" (click)="edit()">Edit</a>
+                    </div>
+                    <div *ngSwitchWhen="true">
+                        <table class="table profile-table">
+                            <tbody>
+                            <tr>
+                                <th scope="row">First Name</th>
+                                <td><input class="form-control form-control-sm" type="text"
+                                           placeholder="{{user?.first_name}}"></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Last Name</th>
+                                <td><input class="form-control form-control-sm" type="text"
+                                           placeholder="{{user?.last_name}}"></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Username</th>
+                                <td><input class="form-control form-control-sm" type="text"
+                                           placeholder="{{user?.username}}">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Last Update</th>
+                                <td>{{getDate(user?.updatedAt)}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <a href="#" class="btn btn-block btn-success btn-sm" (click)="save()">Save</a>
+                    </div>
+                </div>
 
-<!-- Tab panes -->
-<div class="tab-content">
-    <div class="tab-pane active" id="home" role="tabpanel">...</div>
-    <div class="tab-pane" id="profile" role="tabpanel">...</div>
-    <div class="tab-pane" id="messages" role="tabpanel">...</div>
-    <div class="tab-pane" id="settings" role="tabpanel">...</div>
+            </div>
+            <div class="list-group list-group-flush">
+                <a href class="list-group-item">Profile</a>
+                <a href class="list-group-item">Dapibus ac facilisis in</a>
+                <a href class="list-group-item">Vestibulum at eros</a>
+            </div>
+            <div class="card-block">
+                <a href="#" class="card-link">Logout</a>
+                <a href="#" class="card-link">Homepage</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div [ngSwitch]="creatingTrip">
+            <div class="card" *ngSwitchDefault>
+                <div class="card-header">
+                    Trips
+                    <div class="pull-xs-right">
+                        <a (click)="createTrip()">Create</a>
+                    </div>
+                </div>
+                <table class="table table-sm" *ngIf="showTrips">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th><i class="fa fa-users fa-m-b-4" aria-hidden="true"></i></th>
+                        <th>Name</th>
+                        <th>Starts</th>
+                        <th>Ends</th>
+                        <th><i class="fa fa-cogs fa-m-b-4" aria-hidden="true"></i></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let trip of trips; let i = index">
+                        <th scope="row">{{i + 1}}</th>
+                        <th scope="row">
+                            <span class="label label-pill fa-m-t-3"
+                                  [ngClass]="{'label-danger': !trip.is_public, 'label-success': trip.is_public}">
+                                <i class="fa" [ngClass]="{'fa-lock': !trip.is_public, 'fa-unlock': trip.is_public}"
+                                   aria-hidden="true"></i>
+                            </span>
+                        </th>
+                        <td>{{trip?.name || 'No name'}}</td>
+                        <td>{{parseDate(trip?.start_date, 'DD/MM/YY') || '-'}}</td>
+                        <td>{{parseDate(trip?.end_date, 'DD/MM/YY') || '-'}}</td>
+                        <td>
+                            <div class="btn-group btn-group-sm fa-m-t-3" role="group" aria-label="...">
+                                <button type="button" class="btn btn-secondary" (click)="editTrip(trip?.id)">
+                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                </button>
+                                <button type="button" class="btn btn-danger" (click)="deleteTrip(trip?.id)">
+                                    <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <p class="text-md-center" *ngIf="!showTrips">No trips created yet.</p>
+            </div>
+            <div class="card" *ngSwitchWhen="true">
+                <nav class="nav nav-inline p-a-1">
+                    <a class="nav-link active" (click)="goBack()"><i class="fa fa-angle-left" aria-hidden="true"></i>
+                        Back</a>
+                </nav>
+                <div class="p-a-1">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h4><i class="fa fa-globe" aria-hidden="true"></i> {{trip.name || "No name"}}</h4>
+                            <small class="text-muted">
+                                <i class="fa" [ngClass]="{'fa-lock': !trip.is_public, 'fa-unlock': trip.is_public}"
+                                   aria-hidden="true"></i> • {{parseDate(trip.start_date, "YYYY")}} •
+                                {{trip.participants}}
+                                participants
+                            </small>
+                        </div>
+                        <div class="col-md-6">
+                            <button type="button" class="btn btn-success-outline btn-sm pull-right">Invite friends</button>
+                            <small class="pull-right text-muted" id="small-id">{{trip.id}}</small>
+                        </div>
+                    </div>
+                    <hr>
+                    <form #tripForm="ngForm" [ngFormModel]="formTrip">
+                        <fieldset class="form-group" [hidden]="true">
+                            <label for="id">Trip ID</label>
+                            <input type="text" class="form-control" id="id" disabled placeholder="{{trip.id}}"
+                                   [(ngModel)]="trip.id"
+                                   ngControl="id">
+                        </fieldset>
+                        <fieldset class="form-group">
+                            <label for="name">Trip name</label>
+                            <input type="text" class="form-control" id="name" placeholder="eg. South America"
+                                   [(ngModel)]="trip.name"
+                                   ngControl="name">
+                        </fieldset>
+                        <hr>
+                        <fieldset class="row form-group">
+                            <div class="col-md-6">
+                                <label for="start_date">Start date</label>
+                                <input type="date" class="form-control" id="start_date"
+                                       [(ngModel)]="trip.start_date"
+                                       ngControl="start_date">
+                                <small class="text-muted">
+                                    Number of days: {{numberOfDays || 0}}
+                                </small>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="end_date">End date</label>
+                                <input type="date" class="form-control" id="end_date"
+                                       [(ngModel)]="trip.end_date"
+                                       ngControl="end_date">
+                            </div>
+                        </fieldset>
+                        <hr>
+                        <fieldset class="form-group row">
+                            <div class="col-md-6">
+                                <label for="description">Description</label>
+                                <textarea class="form-control" id="description" rows="3"
+                                          [(ngModel)]="trip.description"
+                                          ngControl="description"></textarea>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="participants">Maximum number of participants</label>
+                                <select class="form-control" id="participants"
+                                        [(ngModel)]="trip.participants"
+                                        ngControl="participants">
+                                    <option [value]=0>0</option>
+                                    <option [value]=1>1</option>
+                                    <option [value]=2>2</option>
+                                    <option [value]=3>3</option>
+                                    <option [value]=4>4</option>
+                                    <option [value]=5>5</option>
+                                </select>
+                                <hr>
+                                <label class="c-input c-checkbox">
+                                    <input type="checkbox"
+                                           [(ngModel)]="trip.is_public"
+                                           ngControl="is_public">
+                                    <span class="c-indicator"></span>
+                                    Public
+                                </label>
+                            </div>
+                        </fieldset>
+                        <hr>
+                        <div [ngSwitch]="showDays">
+                            <div *ngSwitchWhen="true">
+                                <fieldset class="row">
+                                    <div class="col-md-3" id="day-list">
+                                        <ul class="nav nav-pills nav-stacked" *ngFor="let day of days">
+                                            <li class="nav-item">
+                                                <a class="nav-link"
+                                                   (click)="selectDay(day)"
+                                                   [ngClass]="{'active': selectedDay?.id == day?.id}">
+                                                    {{parseDate(day.date, "dd, MMM Do")}}
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div *ngIf="selectedDay">
+                                            <day [id]="selectedDay?.date" [createdAt]="selectedDay?.date"></day>
+                                        </div>
+                                        <div *ngIf="!selectedDay">
+                                            <p class="text-md-center"><em>Please select a day to edit.</em></p>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                            <div *ngSwitchWhen="false">
+                                <p class="text-md-center"><em>Please select a date range.</em></p>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

@@ -12,11 +12,12 @@ var core_1 = require('@angular/core');
 var common_1 = require('@angular/common');
 var router_deprecated_1 = require('@angular/router-deprecated');
 var http_1 = require('@angular/http');
-var Observable_1 = require("rxjs/Observable");
+var handle_service_1 = require("../../services/handle.service");
 var SignupComponent = (function () {
-    function SignupComponent(router, http) {
+    function SignupComponent(router, http, handle) {
         this.router = router;
         this.http = http;
+        this.handle = handle;
         this.signUpForm = new common_1.ControlGroup({
             first_name: new common_1.Control(""),
             last_name: new common_1.Control(""),
@@ -32,32 +33,24 @@ var SignupComponent = (function () {
         var password = data.password;
         var credentials = "first_name=" + first_name + "&last_name=" +
             last_name + "&username=" + username + "&password=" + password;
-        var headers = new http_1.Headers();
-        headers.append('Content-Type', 'application/x-www-form-urlencoded');
-        this.http.post('http://localhost:3005/signup', credentials, {
+        var headers = new http_1.Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
+        this.http.post('http://localhost:3010/signup', credentials, {
             headers: headers
         }).map(function (res) { return res.json(); })
             .subscribe(function (data) {
-            SignupComponent.saveJwt(data.id_token);
+            _this.handle.saveJwt(data.id_token);
             _this.router.parent.navigateByUrl('/profile');
-        }, function (err) { return SignupComponent.handleError(err); }, function () { return console.log('Auth OK!'); });
-    };
-    SignupComponent.saveJwt = function (jwt) {
-        if (jwt) {
-            localStorage.setItem('id_token', jwt);
-        }
-    };
-    SignupComponent.handleError = function (error) {
-        alert('[' + error.status + '] ' + error._body);
-        return Observable_1.Observable.throw(error);
+        }, function (err) { return _this.handle.error(err); }, function () { return console.log('Auth OK!'); });
     };
     SignupComponent = __decorate([
         core_1.Component({
             selector: 'signup',
             directives: [router_deprecated_1.RouterLink],
+            providers: [handle_service_1.Handle],
+            styleUrls: ['app/components/signup/signup.component.css'],
             templateUrl: 'app/components/signup/signup.component.html'
         }), 
-        __metadata('design:paramtypes', [router_deprecated_1.Router, http_1.Http])
+        __metadata('design:paramtypes', [router_deprecated_1.Router, http_1.Http, handle_service_1.Handle])
     ], SignupComponent);
     return SignupComponent;
 }());
